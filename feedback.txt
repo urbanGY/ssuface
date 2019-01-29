@@ -1,0 +1,36 @@
+2019.1.30
+***
+name1, name2, name3 ... 등으로 연속해서 string + int 로 이름을 지어야 할 때
+
+name = 'fileName'
+num = 1
+name = name + str(num)
+
+으로 가능 (파일 입출력 예 savaFile.py 참고)
+
+***
+np.array가 훨씬 빠른 연산속도(내부가 c로 작동해서?)
+cv.imread를 통해 얻어진 2차원 list를 3차원 list로 병합한 새로운 list가 필요할 때
+np.stack을 통해 차원을 올릴 수 있다. -> list = np.stack([list1, list2, list3])
+근데 여기서는 2차원 list 1847을 np.stack을 이용해 병합해야함. 즉, np.stack([list1, list2, list3 ... list1847])
+->[list1, list2, list3, .. list1847]을 반환하는 함수를 정의
+
+    def func(input):
+        return [cv.imread(input[x]) for x int range(1847)]  
+
+    list = np.stack(func(image_address_list))
+    사전에 list로 정리해둔 이미지 주소를 매개변수로 주고 순서대로 경로를 읽어와 imread의 
+    매개변수로 전달해 최종적으로 원하는 이미지의 2차원 list들을 반환해 3차원 list로 병합한다
+
+단순 list에 계속 원소들을 넣어야 할 때
+-> list.append(element) 병렬적으로 계속 추가된다.
+(makeFileList.py 참고)
+
+TODO:
+    1. cnn 모델 만들어서 기본모델 작동여부 확인
+    2. 데이터 전처리 과정에서 반복문 반복 횟수 영상마다 다를 것임으로 data/class 아래에 이에 필요한 txt파일 만들어서 자동화 준비
+    3. 모델 저장 및 불러오는 방법 알아보기
+    4. .py 실행 방법 알아보기
+    5. 다른 파일 어떻게 불러오는지 알아보기
+    6. 구글 cloudml 사용 염두
+    7. 학습중 cost 그래프로 보는거 알아보기
