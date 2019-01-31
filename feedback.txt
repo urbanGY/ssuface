@@ -34,3 +34,26 @@ TODO:
     5. 다른 파일 어떻게 불러오는지 알아보기
     6. 구글 cloudml 사용 염두
     7. 학습중 cost 그래프로 보는거 알아보기
+
+
+2019.1.31
+***
+cv.IMREAD_GRAYSCALE로 읽어서 용량도 줄이고 학습모델의 shape도 통일!
+next_element로 dataset에 넣은 정보를 그냥 가져오면
+ex) batch = next_element
+그냥 텐서 오브젝트가 던져짐으로 
+-> batch = sess.run(next_element)해서 feeding 하도록 하자
+
+***
+sess.run(tf.global_variables_initializer())
+sess.run(iterator.initializer)
+variable 과 iterator등 학습 전 반드시 initializer을 하도록 하자 안하면 안돌아감 ㅡㅡ
+
+***
+계속 내가 feed하려는 데이터랑 학습 모델이 요구하는 float의 형 일치가 이뤄지지 않는다.
+data = tf.to_float(data, name='ToFloat')로 바꿨는데도 안댐 ㅡㅡ
+근데 print(type(data))로 보면 <class 'tensorflow.python.framework.ops.Tensor'>이렇게 나오는데
+원하는 대로 변화가 된건지는 의문
+
+TODO:
+    기존 mnist등등의 기본 예제에서 불러온 자료가 어떤 타입인지 보고 그에 맞춰보자
