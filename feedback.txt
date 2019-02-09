@@ -57,3 +57,27 @@ data = tf.to_float(data, name='ToFloat')로 바꿨는데도 안댐 ㅡㅡ
 
 TODO:
     기존 mnist등등의 기본 예제에서 불러온 자료가 어떤 타입인지 보고 그에 맞춰보자
+
+
+2019.2.10
+***
+feed_dict의 x,y는 내가 정의한 placeholder로 여기에 맞는 자료를 집어넣어야만 한다
+따라서 이번경우에는 반드시 float형 [?,2304]의 shape을 가지는 자료를 넣어야만 한다
+착각하기 쉬우니 주의!
+
+***
+tensor object는 sess.run(tensor_object)하면 본래의 자료를 던져준다
+x_data , y_data = sess.run(next_element)는 각각 x 와 y에 내가 정한만큼 batch해 준다
+그리고 이를 바로 feed_dict={x:x_data, y:y_data}해줘야 한다.
+왜냐하면 x_data, y_data의 shape이 [batch_size,2304] , [batch_size,3]으로 이미 place holder에
+맞게 나오기 때문
+
+***
+검증에 필요한 모델은 fancy_softmax.ipynb에서 hypothesis부분으로 sotfmax의 반환이다
+
+근데 cnn에서는 y_conv부분으로 마찬가지로 softmax의 반환인데 input으로 cnn처리된 1024
+배열을 필요로 한다. 즉, 2304의 이미지 벡터로는 결과를 볼 수 없다
+
+TODO:
+    CNN모델에서 학습된 모델을 테스트하는 방법
+    dataset에서 train과 test데이터 셋 분리하는 방법
