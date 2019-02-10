@@ -81,3 +81,28 @@ x_data , y_data = sess.run(next_element)는 각각 x 와 y에 내가 정한만큼 batch해 �
 TODO:
     CNN모델에서 학습된 모델을 테스트하는 방법
     dataset에서 train과 test데이터 셋 분리하는 방법
+
+
+2019.2.11
+***
+rank -> 차원
+shape -> 가장 안쪽 차원(우측)부터 element의 수
+axis -> 가장 바깥쪽 차원부터 0으로 시작해서 예를들어 rank가 4라면 가장 안쪽 axis는 3이됨
++ 가장 안쪽의 axis는 -1이라고도 표현(slicing 할 때랑 같은 느낌)
+
+***
+matrix의 곱은 matmul을 사용해야 우리가 생각하는 결과가 나옴
+그냥 곱하기 하면 걍 이상한 값 나오니 주의
+
+***
+braodcasting을 통해 다른 shape을 extend하여 어거지로 연산을 가능하게함
+
+***
+reduce_mean을 할 때 axis에 따라서 다르게 연산이 됨
+ex)x = ( [1. 2.]
+           [3. 4.] )
+
+    tf.reduce_mean(x, axis=0).eval() -> [2., 3.]
+    tf.reduce_mean(x, axis=1).eval() -> [1.5, 3.5]
+
+축 없이 reduce_mean을 하면 모든 원소의 평균이다. 예제의 경우 2.5
