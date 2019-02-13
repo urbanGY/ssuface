@@ -106,3 +106,34 @@ ex)x = ( [1. 2.]
     tf.reduce_mean(x, axis=1).eval() -> [1.5, 3.5]
 
 축 없이 reduce_mean을 하면 모든 원소의 평균이다. 예제의 경우 2.5
+
+2019.2.13
+***
+기존에 학습이 안되는 부분의 원흉은 cross_entropy였음
+가장 중요한 요소는 비용이 제대로 되느냐!
+cross_entropy = -tf.reduce_sum(y * tf.log(y_conv)) -> kernel 에서 nan 값 만들어냄. 0log0의 경우 이렇게 되는듯
+cross_entropy = -tf.reduce_sum(y*tf.log(tf.clip_by_value(y_conv,1e-10,1.0))) -> 기존의 nan문제는 해결됬지만 학습이 계속 안됨. 이유는 모르겟다..
+loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=logits)) -> 학습 잘됨
+
+***
+kernel의 크기, 히든레이어의 수, fc layer의 수는 학습 데이터에 따라 최적의 조건이 다른듯
+ex) cifar에서 사용한 다중 레이어(5단계) 보다 mnist에서 힌트를 얻은3단 레이어가 내 데이터에서는 더 빠르고 정확하게 값을 예측했다.
+     또한 fc layer가 더 많다고 학습이 빠르고 정확해지는 것 같지는 않다.
+
+***
+fc layer의 shape이 1024가 384보다 더 학습이 잘 되었는데 무슨 근거가 있는지는 모르겠따
+
+***
+학습한 모델 저장하는 방법
+saver = tf.train.Saver()
+saver.save(sess, './model/model.ckpt')#global_step=1000 1000번째 모델 저장
+
+학습한 모델 불러와서 테스트하는 방법(testingModel.py 구현)
+학습 과정에서의 variable, placeholder 재현 변수명까지 같게 해야하는지는 모르겠다.
+saver = tf.train.Saver()
+saver.restore(sess, './model/model.ckpt')#이 코드 후에 변수들에 학습된 값들이 들어간다.
+
+test가 목적임으로 train_step, cross_enropy등의 변수는 필요없다. 검증만 하면 되기에 accuracy만 있으면 된다.
+saver.함수를 쓸 때에는 session범위 안이어야한다.
+
+
